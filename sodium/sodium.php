@@ -56,7 +56,20 @@ const SODIUM_CRYPTO_PWHASH_OPSLIMIT_MODERATE = 6;
 const SODIUM_CRYPTO_PWHASH_MEMLIMIT_MODERATE = 134217728;
 const SODIUM_CRYPTO_PWHASH_OPSLIMIT_SENSITIVE = 8;
 const SODIUM_CRYPTO_PWHASH_MEMLIMIT_SENSITIVE = 536870912;
-
+const SODIUM_LIBRARY_VERSION="1.0.11";
+const SODIUM_LIBRARY_MAJOR_VERSION = 9;
+const SODIUM_LIBRARY_MINOR_VERSION = 3;
+const SODIUM_CRYPTO_KDF_BYTES_MIN = 16;
+const SODIUM_CRYPTO_KDF_BYTES_MAX = 64;
+const SODIUM_CRYPTO_KDF_CONTEXTBYTES = 8;
+const SODIUM_CRYPTO_KDF_KEYBYTES = 32;
+const SODIUM_CRYPTO_KX_SEEDBYTES = 32;
+const SODIUM_CRYPTO_KX_SESSIONKEYBYTES = 32;
+const SODIUM_CRYPTO_KX_KEYPAIRBYTES = 64;
+const SODIUM_CRYPTO_PWHASH_ALG_ARGON2I13 = 1;
+const SODIUM_CRYPTO_PWHASH_ALG_DEFAULT = 1;
+const SODIUM_CRYPTO_PWHASH_SALTBYTES = 16;
+const SODIUM_CRYPTO_PWHASH_STRPREFIX = '$argon2i$';
 
 /**
  * Can you access AES-256-GCM? This is only available if you have supported
@@ -204,6 +217,128 @@ function sodium_crypto_auth(
     unset($msg, $key);
     return '';
 }
+
+/**
+ * Get random bytes for key
+ * @link http://php.net/manual/en/function.sodium-crypto-auth-keygen.php
+ * @return string
+ */
+function sodium_crypto_auth_keygen(): string {}
+
+/**
+ * @link http://php.net/manual/en/function.sodium-crypto-kx-keypair.php
+ * @since 7.2
+ * @return string
+ */
+function sodium_crypto_kx_keypair (): string {}
+
+/**
+ * @link http://php.net/manual/en/function.sodium-crypto-kx-publickey.php
+ * @since 7.2
+ * @param string $key
+ * @return string
+ */
+
+function sodium_crypto_kx_publickey (string $key): string {}
+
+/**
+ * @link http://php.net/manual/en/function.sodium-crypto-kx-secretkey.php
+ * @since 7.2
+ * @param string $key
+ * @return string
+ */
+function sodium_crypto_kx_secretkey (string $key): string {}
+
+/**
+ * @link http://php.net/manual/en/function.sodium-crypto-kx-seed-keypair.php
+ * @since 7.2
+ * @param string $string
+ * @return string
+ */
+function sodium_crypto_kx_seed_keypair (string $string): string {}
+
+/**
+ * @link http://php.net/manual/en/function.sodium-crypto-kx-server-session-keys.php
+ * @since 7.2
+ * @param string $server_keypair
+ * @param string $client_key
+ * @return array
+ */
+function sodium_crypto_kx_server_session_keys (string $server_keypair , string $client_key): array {}
+
+/**
+ * Get random bytes for key
+ * @link http://php.net/manual/en/function.sodium-crypto-generichash-keygen.php
+ * @since 7.2
+ * @return string
+ */
+function sodium_crypto_generichash_keygen(): string {}
+
+
+/**
+ * @since 7.2
+ * @link http://php.net/manual/en/function.sodium-crypto-kx-client-session-keys.php
+ * @param string $client_keypair
+ * @param string $server_key
+ * @return array
+ */
+function sodium_crypto_kx_client_session_keys (string $client_keypair, string $server_key): array {}
+
+/**
+ * @link http://php.net/manual/en/function.sodium-crypto-kdf-derive-from-key.php
+ * @since 7.2
+ * @param int $subkey_len
+ * @param int $subkey_id
+ * @param string $context
+ * @param string $key
+ * @return string
+ */
+function sodium_crypto_kdf_derive_from_key (int $subkey_len, int $subkey_id, string $context, string $key): string {}
+
+/**
+ * Get random bytes for key
+ * @link http://php.net/manual/en/function.sodium-crypto-kdf-keygen.php
+ * @since 7.2
+ * @return string
+ */
+function sodium_crypto_kdf_keygen(): string {}
+
+/**
+ * Get random bytes for key
+ * @link http://php.net/manual/en/function.sodium-crypto-shorthash-keygen.php
+ * @since 7.2
+ * @return string
+ */
+function sodium_crypto_shorthash_keygen(): string {}
+
+/**
+ * Get random bytes for key
+ * @link http://php.net/manual/en/function.sodium-crypto-stream-keygen.php
+ * @since 7.2
+ * @return string
+ */
+function sodium_crypto_stream_keygen(): string {}
+
+/**
+ * Add padding data
+ * @link http://php.net/manual/en/function.sodium-pad.php
+ * @since 7.2
+ * @param $string
+ * @param $length
+ * @return string
+ */
+function sodium_pad ($string, $length): string {}
+
+/**
+ * Remove padding data
+ * @link http://php.net/manual/en/function.sodium-unpad.php
+ * @since 7.2
+ * @param $string
+ * @param $length
+ */
+function sodium_unpad ($string, $length): string {}
+
+
 
 /**
  * Secret-key message verification
@@ -423,7 +558,7 @@ function sodium_crypto_generichash_init(
  * Update the hash state with some data
  * BLAKE2b
  *
- * @param &string $state
+ * @param string &$state
  * @param string $append
  * @return bool
  */
@@ -460,14 +595,16 @@ function sodium_crypto_generichash_final(
  * @param string $salt
  * @param int $opslimit
  * @param int $memlimit
- * @return $string
+ * @param int $alg [optional]
+ * @return string
  */
 function sodium_crypto_pwhash(
     int $out_len,
     string $passwd,
     string $salt,
     int $opslimit,
-    int $memlimit
+    int $memlimit,
+    int $alg
 ): string {
     unset($out_len, $passwd, $salt, $opslimit, $memlimit);
     return '';
@@ -480,7 +617,7 @@ function sodium_crypto_pwhash(
  * @param string $passwd
  * @param int $opslimit
  * @param int $memlimit
- * @return $string
+ * @return string
  */
 function sodium_crypto_pwhash_str(
     string $passwd,
@@ -516,14 +653,16 @@ function sodium_crypto_pwhash_str_verify(
  * @param string $salt
  * @param int $opslimit
  * @param int $memlimit
- * @return $string
+ * @param int $alg [optional]
+ * @return string
  */
 function sodium_crypto_pwhash_scryptsalsa208sha256(
     int $out_len,
     string $passwd,
     string $salt,
     int $opslimit,
-    int $memlimit
+    int $memlimit,
+    int $alg
 ): string {
     unset($out_len, $passwd, $salt, $opslimit, $memlimit);
     return '';
@@ -536,7 +675,7 @@ function sodium_crypto_pwhash_scryptsalsa208sha256(
  * @param string $passwd
  * @param int $opslimit
  * @param int $memlimit
- * @return $string
+ * @return string
  */
 function sodium_crypto_pwhash_scryptsalsa208sha256_str(
     string $passwd,
@@ -905,10 +1044,11 @@ function sodium_compare(
  * Convert from hex without side-chanels
  *
  * @param string $binary
+ * @param string $ignore [optional]
  * @return string
  */
 function sodium_hex2bin(
-    string $hex
+    string $hex, string $ignore
 ): string {
     unset($hex);
     return '';
@@ -917,7 +1057,7 @@ function sodium_hex2bin(
 /**
  * Increment a string in little-endian
  *
- * @param &string $nonce
+ * @param string &$nonce
  * @return string
  */
 function sodium_increment(
@@ -929,7 +1069,7 @@ function sodium_increment(
 /**
  * Add the right operand to the left
  *
- * @param &string $left
+ * @param string &$left
  * @param string $right
  */
 function sodium_add(
@@ -973,10 +1113,11 @@ function sodium_memcmp(
 /**
  * Wipe a buffer
  *
- * @param &string $nonce
+ * @param string &$nonce
+ * @since 7.2
  */
 function sodium_memzero(
-    string &$target
+    &$reference, $length
 ) {
     $target = '';
 }
@@ -993,11 +1134,12 @@ function sodium_version_string(): string {
 /**
  * Scalar multiplication of the base point and your key
  *
- * @param string $sk
+ * @param string $string_1
+ * @param string $string_2
  * @return string
  */
 function sodium_crypto_scalarmult_base(
-    string $sk
+    string $string_1, string $string_2
 ): string {
     unset($sk);
 
@@ -1046,3 +1188,7 @@ function sodium_crypto_aead_chacha20poly1305_keygen(): string {}
  * @see http://php.net/manual/en/function.sodium-crypto-aead-chacha20poly1305-ietf-keygen.php
  */
 function sodium_crypto_aead_chacha20poly1305_ietf_keygen(): string {}
+
+class SodiumException extends Exception {
+
+}

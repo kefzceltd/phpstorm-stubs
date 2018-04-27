@@ -1136,7 +1136,7 @@ class mysqli_result implements Traversable  {
 	 * row or null if there are no more rows in resultset.
 	 * @since 5.0
 	 */
-	public function fetch_object ($class_name = null, array $params = null) {}
+	public function fetch_object ($class_name = 'stdClass', array $params = null) {}
 
 	/**
 	 * Get a result row as an enumerated array
@@ -1754,7 +1754,7 @@ function mysqli_fetch_assoc ($result) {}
  * To access the other column(s) of the same name,
  * you either need to access the result with numeric indices by using mysqli_fetch_row() or add alias names.
  */
-function mysqli_fetch_object ($result, $class_name = '', $params = null) {}
+function mysqli_fetch_object ($result, $class_name = 'stdClass', $params = null) {}
 
 /**
  * Get a result row as an enumerated array
@@ -2053,13 +2053,13 @@ function mysqli_ping ($link) {}
  * Poll connections
  * @link http://php.net/manual/en/mysqli.poll.php
  * @param array $read
- * @param array $write
  * @param array $error
+ * @param array $reject
  * @param int $sec
  * @param int $usec
  * @return int|bool Returns number of ready connections upon success, FALSE otherwise.
  */
-function mysqli_poll (array &$read = null, array &$write = null, &$error = null, $sec, $usec = 0) {}
+function mysqli_poll (array &$read = null, array &$error = null, &$reject = null, $sec, $usec = 0) {}
 
 /**
  * Prepare an SQL statement for execution

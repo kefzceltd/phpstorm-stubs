@@ -875,6 +875,8 @@ class Phar extends RecursiveDirectoryIterator implements RecursiveIterator, Seek
 	 */
 	public function seek ($position) {}
 
+    public function _bad_state_ex (){}
+
 }
 
 /**
